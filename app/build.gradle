@@ -1,0 +1,100 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion '29.0.3'
+
+    signingConfigs {
+        release {
+            //TODO修改为你的release签名文件信息。
+            storeFile file('..\\mapstyle.jks')
+            storePassword "123456"
+            keyAlias "kavin"
+            keyPassword "123456"
+            //TODO修改为你的release签名文件信息。
+
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+        debug {
+            //TODO修改为你的release签名文件信息。
+            storeFile file('..\\mapstyle.jks')
+            storePassword "123456"
+            keyAlias "kavin"
+            keyPassword "123456"
+            //TODO你的debug签名文件信息。
+
+            v1SigningEnabled true
+            v2SigningEnabled false
+        }
+    }
+
+    defaultConfig {
+        applicationId "com.kavin.location"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 7
+        versionName "v1.1.5"
+
+        multiDexEnabled true
+        //multiDexKeepProguard file('multiDexKeep.pro') // keep specific classes using proguard syntax
+        multiDexKeepFile file('multiDexKeep.txt') // 把Bugly的类放到主Dex
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+
+        ndk {
+            //设置支持的SO库架构（开发者可以根据需要，选择一个或多个平台的so）
+//            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a", "x86","arm64-v8a","x86_64"
+            abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
+            //TODO 重要 阿里活体人脸认证 若你需支持armeabi，请从下载到的sdk包内将jni-armeabi.zip下的so拷贝到您的工程下
+        }
+
+
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            buildConfigField "boolean", "isDebug", "false"
+
+        }
+
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "isDebug", "true"
+
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'com.amap.api:3dmap:7.8.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    //3D地图so及jar
+    implementation 'com.amap.api:3dmap:7.8.0'
+    //定位功能
+    implementation 'com.amap.api:location:latest.integration'
+    //搜索功能
+    implementation 'com.amap.api:search:latest.integration'
+
+}
